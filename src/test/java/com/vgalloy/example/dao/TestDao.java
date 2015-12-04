@@ -2,6 +2,9 @@ package com.vgalloy.example.dao;
 
 import com.vgalloy.example.dao.impl.PersonDaoImpl;
 import com.vgalloy.example.entity.Person;
+import com.vgalloy.example.factory.SessionFactoryFactory;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,10 +14,23 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by vgalloy on 04/12/15.
+ *
+ * /!\ Attention ici un context transactionnel est ouvert par Test !
+ * cf : les deux derniers test
  */
 public class TestDao {
 
     private static PersonDao personDao = PersonDaoImpl.getInstance();
+
+    @Before
+    public void init() {
+        SessionFactoryFactory.getSessionFactory().getCurrentSession().beginTransaction();
+    }
+
+    @After
+    public void end() {
+        SessionFactoryFactory.getSessionFactory().getCurrentSession().getTransaction().commit();
+    }
 
     @Test
     public void testCreate() {
@@ -72,6 +88,11 @@ public class TestDao {
         assertEquals(personDao.getById(person.getId()).getName(), newName);
     }
 
+    /**
+     * Dans le cas de figure ou le context n'est pas fermé, les objets restent attachés à la session et sont donc
+     * modifiés directement en base.
+     */
+
     @Test
     public void testAttachDetach() {
         //GIVEN
@@ -82,7 +103,7 @@ public class TestDao {
         person.setName("Galloy");
         
         //THEN
-        assertNotEquals(personDao.getById(person.getId()), person);
+        assertEquals(personDao.getById(person.getId()), person);
     }
 
     @Test
@@ -97,7 +118,7 @@ public class TestDao {
         person.setName("NewName");
 
         //THEN
-        assertNotEquals(personDao.getById(person.getId()), person);
+        assertEquals(personDao.getById(person.getId()), person);
     }
 
 }

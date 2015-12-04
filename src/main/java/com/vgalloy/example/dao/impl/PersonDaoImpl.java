@@ -22,40 +22,28 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public void create(Person person) {
-        sessionFactory.getCurrentSession().beginTransaction();
         sessionFactory.getCurrentSession().save(person);
-        sessionFactory.getCurrentSession().getTransaction().commit();
     }
 
     @Override
     public List<Person> getAll() {
-        sessionFactory.getCurrentSession().beginTransaction();
-        List<Person> list =  sessionFactory.getCurrentSession().createCriteria(Person.class).list();
-        sessionFactory.getCurrentSession().getTransaction().commit();
-        return list;
+        return sessionFactory.getCurrentSession().createCriteria(Person.class).list();
     }
 
     @Override
     public Person getById(Long id) {
-        sessionFactory.getCurrentSession().beginTransaction();
-        Person person = (Person) sessionFactory.getCurrentSession().get(Person.class, id);
-        sessionFactory.getCurrentSession().getTransaction().commit();
-        return person;
+        return (Person) sessionFactory.getCurrentSession().get(Person.class, id);
     }
 
     @Override
     public void update(Person person) {
-        sessionFactory.getCurrentSession().beginTransaction();
         sessionFactory.getCurrentSession().merge(person);
-        sessionFactory.getCurrentSession().getTransaction().commit();
     }
 
     @Override
     public void delete(Long id) {
-        sessionFactory.getCurrentSession().beginTransaction();
         Person person = (Person) sessionFactory.getCurrentSession().get(Person.class, id);
         sessionFactory.getCurrentSession().delete(person);
-        sessionFactory.getCurrentSession().getTransaction().commit();
     }
 
     public static PersonDao getInstance() {
