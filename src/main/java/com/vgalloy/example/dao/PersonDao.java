@@ -10,18 +10,21 @@ import java.util.List;
 public interface PersonDao {
     /**
      * Insert Person into DB.
+     *
      * @param person
      */
     void create(Person person);
 
     /**
      * Get All person.
+     *
      * @return list of all person in DB
      */
     List<Person> getAll();
 
     /**
      * Find a person with its own id.
+     *
      * @param id the given id
      * @return the person with the given id
      */
@@ -29,12 +32,14 @@ public interface PersonDao {
 
     /**
      * Update a person.
+     *
      * @param person the person to update
      */
     void update(Person person);
 
     /**
      * Delete a person.
+     *
      * @param id the person's id to delete
      */
     void delete(Long id);

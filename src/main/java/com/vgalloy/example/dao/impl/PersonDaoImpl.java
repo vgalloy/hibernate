@@ -3,7 +3,6 @@ package com.vgalloy.example.dao.impl;
 import com.vgalloy.example.dao.PersonDao;
 import com.vgalloy.example.entity.Person;
 import com.vgalloy.example.factory.SessionFactoryFactory;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -23,50 +22,40 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public void create(Person person) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(person);
-        session.getTransaction().commit();
-        session.close();
+        sessionFactory.getCurrentSession().beginTransaction();
+        sessionFactory.getCurrentSession().save(person);
+        sessionFactory.getCurrentSession().getTransaction().commit();
     }
 
     @Override
     public List<Person> getAll() {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        List<Person> list = session.createCriteria(Person.class).list();
-        session.getTransaction().commit();
-        session.close();
+        sessionFactory.getCurrentSession().beginTransaction();
+        List<Person> list =  sessionFactory.getCurrentSession().createCriteria(Person.class).list();
+        sessionFactory.getCurrentSession().getTransaction().commit();
         return list;
     }
 
     @Override
     public Person getById(Long id) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Person person = (Person) session.get(Person.class, id);
-        session.getTransaction().commit();
-        session.close();
+        sessionFactory.getCurrentSession().beginTransaction();
+        Person person = (Person) sessionFactory.getCurrentSession().get(Person.class, id);
+        sessionFactory.getCurrentSession().getTransaction().commit();
         return person;
     }
 
     @Override
     public void update(Person person) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.merge(person);
-        session.getTransaction().commit();
-        session.close();
+        sessionFactory.getCurrentSession().beginTransaction();
+        sessionFactory.getCurrentSession().merge(person);
+        sessionFactory.getCurrentSession().getTransaction().commit();
     }
 
     @Override
     public void delete(Long id) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Person person = (Person) session.get(Person.class, id);
-        session.delete(person);
-        session.getTransaction().commit();
-        session.close();
+        sessionFactory.getCurrentSession().beginTransaction();
+        Person person = (Person) sessionFactory.getCurrentSession().get(Person.class, id);
+        sessionFactory.getCurrentSession().delete(person);
+        sessionFactory.getCurrentSession().getTransaction().commit();
     }
 
     public static PersonDao getInstance() {
