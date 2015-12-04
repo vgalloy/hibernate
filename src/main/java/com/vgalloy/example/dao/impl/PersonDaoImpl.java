@@ -2,8 +2,9 @@ package com.vgalloy.example.dao.impl;
 
 import com.vgalloy.example.dao.PersonDao;
 import com.vgalloy.example.entity.Person;
-import com.vgalloy.example.factory.SessionFactoryFactory;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,14 +12,10 @@ import java.util.List;
  * @author Vincent Galloy
  *         Created by Vincent Galloy on 04/12/15.
  */
+@Repository
 public class PersonDaoImpl implements PersonDao {
-    private static PersonDao INSTANCE = new PersonDaoImpl();
-
+    @Autowired
     private SessionFactory sessionFactory;
-
-    private PersonDaoImpl() {
-        this.sessionFactory = SessionFactoryFactory.getSessionFactory();
-    }
 
     @Override
     public void create(Person person) {
@@ -44,10 +41,6 @@ public class PersonDaoImpl implements PersonDao {
     public void delete(Long id) {
         Person person = (Person) sessionFactory.getCurrentSession().get(Person.class, id);
         sessionFactory.getCurrentSession().delete(person);
-    }
-
-    public static PersonDao getInstance() {
-        return INSTANCE;
     }
 
 }

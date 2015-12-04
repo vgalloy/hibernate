@@ -1,11 +1,12 @@
 package com.vgalloy.example.dao;
 
-import com.vgalloy.example.dao.impl.PersonDaoImpl;
 import com.vgalloy.example.entity.Person;
-import com.vgalloy.example.factory.SessionFactoryFactory;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,19 +19,13 @@ import static org.junit.Assert.assertEquals;
  * /!\ Attention ici un context transactionnel est ouvert par Test !
  * cf : les deux derniers test
  */
+
+@Transactional
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:/spring-context.xml" })
 public class TestDao {
-
-    private static PersonDao personDao = PersonDaoImpl.getInstance();
-
-    @Before
-    public void init() {
-        SessionFactoryFactory.getSessionFactory().getCurrentSession().beginTransaction();
-    }
-
-    @After
-    public void end() {
-        SessionFactoryFactory.getSessionFactory().getCurrentSession().getTransaction().commit();
-    }
+    @Autowired
+    private PersonDao personDao;
 
     @Test
     public void testCreate() {
